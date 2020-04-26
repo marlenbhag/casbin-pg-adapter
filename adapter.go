@@ -62,7 +62,7 @@ func NewAdapterByDB(db *pg.DB) (*Adapter, error) {
 	return a, nil
 }
 
-func createCasbinDatabase(arg interface{} DbName string) (*pg.DB, error) {
+func createCasbinDatabase(arg interface{}, DbName string) (*pg.DB, error) {
 	var opts *pg.Options
 	var err error
 	if connURL, ok := arg.(string); ok {
