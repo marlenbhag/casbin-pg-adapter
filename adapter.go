@@ -37,8 +37,8 @@ type Adapter struct {
 // NewAdapter is the constructor for Adapter.
 // arg should be a PostgreS URL string or of type *pg.Options
 // The adapter will create a DB named "casbin" if it doesn't exist
-func NewAdapter(arg interface{}) (*Adapter, error) {
-	db, err := createCasbinDatabase(arg)
+func NewAdapter(arg interface{}, DbName string) (*Adapter, error) {
+	db, err := createCasbinDatabase(arg DbName)
 	if err != nil {
 		return nil, fmt.Errorf("pgadapter.NewAdapter: %v", err)
 	}
@@ -62,7 +62,7 @@ func NewAdapterByDB(db *pg.DB) (*Adapter, error) {
 	return a, nil
 }
 
-func createCasbinDatabase(arg interface{}) (*pg.DB, error) {
+func createCasbinDatabase(arg interface{} DbName string) (*pg.DB, error) {
 	var opts *pg.Options
 	var err error
 	if connURL, ok := arg.(string); ok {
@@ -80,10 +80,10 @@ func createCasbinDatabase(arg interface{}) (*pg.DB, error) {
 	db := pg.Connect(opts)
 	defer db.Close()
 
-	_, err = db.Exec("CREATE DATABASE casbin")
-	db.Close()
+	// _, err = db.Exec("CREATE DATABASE casbin")
+	// db.Close()
 
-	opts.Database = "casbin"
+	opts.Database = DbName
 	db = pg.Connect(opts)
 
 	return db, nil
